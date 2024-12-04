@@ -1,41 +1,69 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import localImage from "../../assets/img/login.png"; // Assurez-vous que le chemin est correct
+import localImage from "../../assets/img/login.png";
 import NavBar from "../../components/public/landing/navBar";
-
 function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
 
-  async function submit(e) {
+  const validateInputs = () => {
+    if (!email || !password) {
+      setError("Veuillez remplir tous les champs.");
+      return false;
+    }
+    setError(null);
+    return true;
+  };
+
+  const submit = async (e) => {
     e.preventDefault();
 
+    if (!validateInputs()) return;
+
     try {
-      const res = await axios.post("http://localhost:8000/", {
+      // Log des données envoyées pour s'assurer qu'elles sont correctes
+      console.log("Données envoyées :", { email, password });
+
+      const response = await axios.post("http://localhost:8000/auth/login", {
         email,
-        password,
+        password
       });
 
-      if (res.data === "exist") {
-        localStorage.setItem("userEmail", email); // Enregistrer l'email dans localStorage
-        navigate("/Landing", { state: { id: email } });
-      } else if (res.data === "notexist") {
-        alert("L'utilisateur n'est pas inscrit");
+      // Log de la réponse serveur
+      console.log("Réponse du serveur :", response);
+
+      if (response.status === 200) {
+        // Stocker le token si disponible
+        localStorage.setItem('token', response.data.token);  // Stocker le token dans le localStorage
+
+       
+        navigate("/Landing");  // Redirection après une connexion réussie
+      } else {
+        console.log("Statut inattendu :", response.status);
+        setError("Erreur lors de la connexion. Veuillez réessayer.");
       }
-    } catch (error) {
-      alert("Informations incorrectes");
-      console.error(error);
+    } catch (err) {
+      console.error("Erreur lors de la connexion :", err);
+
+      if (err.response) {
+        console.error("Détails de l'erreur :", err.response.data);
+        setError(err.response.data?.message || "Erreur serveur. Veuillez réessayer plus tard.");
+      } else {
+        // Si la requête échoue sans réponse (ex : problème de réseau)
+        setError("Problème de connexion au serveur. Vérifiez votre connexion Internet.");
+      }
     }
-  }
+  };
 
   return (
     <>
       <NavBar />
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-50 to-white dark:from-gray-800 dark:to-gray-900">
         <div className="flex bg-white rounded-lg shadow-xl overflow-hidden max-w-5xl w-full">
-          {/* Form Section */}
+          {/* Formulaire */}
           <div className="w-1/2 p-10 flex flex-col justify-center">
             <h1 className="text-4xl font-bold text-gray-800 dark:text-white mb-6">
               Bienvenue chez{" "}
@@ -43,10 +71,16 @@ function Login() {
                 Innovaskils
               </span>
             </h1>
+            {error && (
+              <p className="mb-4 text-red-500 text-sm font-semibold">
+                {error}
+              </p>
+            )}
             <form onSubmit={submit}>
               <div className="mb-4">
                 <input
                   type="email"
+                  value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Email"
                   required
@@ -57,6 +91,7 @@ function Login() {
               <div className="mb-6">
                 <input
                   type="password"
+                  value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Mot de passe"
                   required
@@ -83,20 +118,17 @@ function Login() {
               </p>
             </div>
           </div>
-          {/* End Form Section */}
 
-          {/* Image Section */}
+          {/* Illustration */}
           <div className="w-1/2 bg-blue-50 dark:bg-gray-800 relative flex items-center justify-center">
             <img
               src={localImage}
               alt="Login Illustration"
               className="max-w-full max-h-full rounded-lg shadow-lg transform hover:scale-105 transition duration-300"
             />
-            {/* Decorative Circle */}
             <div className="absolute -top-10 -right-10 w-40 h-40 bg-blue-100 rounded-full opacity-50 blur-lg"></div>
             <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-purple-200 rounded-full opacity-40 blur-lg"></div>
           </div>
-          {/* End Image Section */}
         </div>
       </div>
     </>

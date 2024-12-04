@@ -29,7 +29,7 @@ const TestsPage = () => {
     const routes = {
       React: "/Tests/TestReact",
       Angular: "/Tests/TestAngular",
-      "Node.js": "/Tests/TestNode",
+      spring: "/Tests/TestSpring",
       Design: "/Tests/TestDesign",
     };
     navigate(routes[technology] || "/Tests/TestDefault");

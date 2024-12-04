@@ -14,6 +14,7 @@ import Flutter from './public/Cours.jsx/flutter';
 import Python from './public/Cours.jsx/python';
 import Certif from './public/certif';
 import TestsPage from './public/Tests/Tests';
+import QCM from './public/QCM/qcm';
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
         {/* Routes pour les pages de Test */}
         <Route path="/Tests/Tests" element={<TestsPage />} />
 
+        <Route path="/QCM/QCM" element={<QCM/>}/>
 
       </Routes>
     </Router>

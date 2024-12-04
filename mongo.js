@@ -9,17 +9,17 @@ mongoose.connect("mongodb://localhost:27017/IS")
 
     })
 
-const newSchema = new mongoose.Schema({
-        email:{
-            type:String,
-            required:true
-        },
-        password:{
-            type:String,
-            required:true
-        }
+// const newSchema = new mongoose.Schema({
+//         email:{
+//             type:String,
+//             required:true
+//         },
+//         password:{
+//             type:String,
+//             required:true
+//         }
 
-})
+// })
 
-const collection = mongoose.model("collection",newSchema)
-module.exports=collection
+// const collection = mongoose.model("collection",newSchema)
+// module.exports=collection
