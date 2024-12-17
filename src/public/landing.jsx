@@ -14,14 +14,13 @@ const Landing = () => {
             <Nav />
             {/* hero section  */}
             <HeroSection />
+             {/* actualite Section  */}
+             <ActualiteSection />
             {/* solution section  */}
             <SolutionSection />
-            {/* actualite Section  */}
-            <ActualiteSection />
+           
             {/* services  */}
             <Services />
-            {/* pricing section  */}
-            <PricingSection />
             {/* Footer  */}
             <Footer />
             {/* Scroll to top  */}

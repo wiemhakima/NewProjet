@@ -14,7 +14,13 @@ import Flutter from './public/Cours.jsx/flutter';
 import Python from './public/Cours.jsx/python';
 import Certif from './public/certif';
 import TestsPage from './public/Tests/Tests';
-import QCM from './public/QCM/qcm';
+import TestAngular from './public/Tests/TestAngular';
+import TestReact from './public/Tests/TestReact';
+import TestSpring from './public/Tests/TestSpring';
+import TestDesign from './public/Tests/TestDesign';
+import Panier from './public/User/Panier';
+
+
 
 function App() {
   return (
@@ -28,6 +34,8 @@ function App() {
         <Route path="user/Score" element={<Score />} />
         <Route path="user/CreateCV" element={<CreateCV />} />
         <Route path="/certif" element={<Certif />} />
+        <Route path="/user/Panier" element={<Panier />} />
+
 
         {/* Routes pour les pages de cours */}
         <Route path="/cours/design" element={<Design />} />
@@ -38,9 +46,12 @@ function App() {
 
         {/* Routes pour les pages de Test */}
         <Route path="/Tests/Tests" element={<TestsPage />} />
+        <Route path="/Tests/TestAngular" element={<TestAngular/>}/>
+        <Route path="/Tests/TestReact" element={<TestReact/>}/>
+        <Route path="/Tests/TestSpring" element={<TestSpring/>}/>
+        <Route path="/Tests/TestDesign" element={<TestDesign/>}/>
 
-        <Route path="/QCM/QCM" element={<QCM/>}/>
-
+        
       </Routes>
     </Router>
   );

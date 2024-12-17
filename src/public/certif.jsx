@@ -49,68 +49,64 @@ const CertifPage = () => {
   );
 
   const categoryIcons = {
-    Technologie: <FaLaptop />,
-    "Cloud Computing": <FaCloud />,
-    "Sécurité Informatique": <FaShieldAlt />,
-    "Gestion de projet": <FaProjectDiagram />,
+    Technologie: <FaLaptop size={60} color="#007BFF" />,
+    "Cloud Computing": <FaCloud size={60} color="#61dafb" />,
+    "Sécurité Informatique": <FaShieldAlt size={60} color="#dd1b16" />,
+    "Gestion de projet": <FaProjectDiagram size={60} color="#6db33f" />,
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen">
+    <div className="certifications-page bg-light min-vh-100">
       <Nav />
-      <div className="max-w-7xl mx-auto p-6">
-        <h1 className="text-3xl font-bold text-gray-900 mb-4">Préparation aux Certifications</h1>
-        <p className="text-gray-600 mb-8">
-          Obtenez une certification professionnelle des plus grandes marques ou préparez-vous à des certifications reconnues.
-        </p>
+      <div style={styles.page}>
+        {/* En-tête */}
+        <header style={styles.header}>
+          <h1 style={styles.title}>Préparation aux Certifications</h1>
+        </header>
 
-        {/* Filtre des catégories */}
-        <div className="mb-6">
-          <label htmlFor="category" className="text-gray-700 mr-2 font-medium">
-            Filtrer par catégorie :
-          </label>
-          <select
-            id="category"
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            className="p-2 border border-gray-300 rounded-md"
-          >
-            <option value="Tout afficher">Tout afficher</option>
-            <option value="Technologie">Technologie</option>
-            <option value="Cloud Computing">Cloud Computing</option>
-            <option value="Sécurité Informatique">Sécurité Informatique</option>
-            <option value="Gestion de projet">Gestion de projet</option>
-          </select>
+        {/* Filtres */}
+        <div style={styles.filters}>
+          {["Tout afficher", "Technologie", "Cloud Computing", "Sécurité Informatique", "Gestion de projet"].map((category) => (
+            <button
+              key={category}
+              style={{
+                ...styles.filterBtn,
+                ...(selectedCategory === category ? styles.activeFilter : {}),
+              }}
+              onClick={() => setSelectedCategory(category)}
+            >
+              {category}
+            </button>
+          ))}
         </div>
 
         {/* Liste des certifications */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div style={styles.certificationsList}>
           {filteredCertifications
             .slice(0, showAll ? filteredCertifications.length : 3)
-            .map((cert, index) => (
+            .map((cert) => (
               <div
-                key={index}
-                className="p-4 border rounded-lg shadow-md bg-white"
+                key={cert.name}
+                style={styles.certCard}
+                className="cert-card-hover"
               >
-                <h3 className="text-xl font-semibold text-blue-600 mb-2">
-                  {cert.name}
-                </h3>
-                <p className="text-gray-700 mb-4">{cert.description}</p>
-                <p className="text-gray-600 mb-2">
-                  <strong>Catégorie : </strong>
-                  <span className="inline-flex items-center gap-1">
-                    {categoryIcons[cert.category]} {cert.category}
-                  </span>
-                </p>
-                <p className="text-gray-600">
-                  <strong>Niveau : </strong>
-                  {cert.level}
-                </p>
+                <div style={styles.certIcon}>
+                  {categoryIcons[cert.category]}
+                </div>
+                <div style={styles.certInfo}>
+                  <h3 style={styles.certTitle}>{cert.name}</h3>
+                  <p style={styles.certDetail}>
+                    Catégorie : <strong>{cert.category}</strong>
+                  </p>
+                  <p style={styles.certDetail}>
+                    Niveau : <strong>{cert.level}</strong>
+                  </p>
+                </div>
                 <a
                   href={`/certifications/${cert.name
                     .toLowerCase()
                     .replace(/\s+/g, "-")}`}
-                  className="inline-block mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                  style={styles.viewDetailsBtn}
                 >
                   Voir les détails
                 </a>
@@ -119,27 +115,128 @@ const CertifPage = () => {
         </div>
 
         {/* Bouton "Tout afficher" */}
-        <div className="text-center mt-6">
+        <div style={styles.showAllBtnContainer}>
           <button
             onClick={handleShowAllClick}
-            className="px-6 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+            style={styles.showAllBtn}
           >
             {showAll ? "Afficher moins" : "Tout afficher"}
           </button>
         </div>
-
-        {/* Lien "Voir tout" */}
-        <div className="text-center mt-4">
-          <a
-            href="/all-certifications"
-            className="text-blue-500 hover:underline"
-          >
-            Voir toutes les certifications
-          </a>
-        </div>
       </div>
     </div>
   );
+};
+
+const styles = {
+  page: {
+    padding: "20px",
+    maxWidth: "1200px",
+    margin: "0 auto",
+    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+    color: "#333",
+    backgroundColor: "#f7f8fa", // Couleur de fond douce
+  },
+  header: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: "20px",
+  },
+  title: {
+    fontSize: "2.5rem",
+    fontWeight: "700",
+    color: "#007BFF",
+    textTransform: "uppercase",
+    letterSpacing: "2px",
+  },
+  filters: {
+    display: "flex",
+    gap: "12px",
+    justifyContent: "center",
+    marginBottom: "20px",
+    flexWrap: "wrap",
+  },
+  filterBtn: {
+    padding: "12px 20px",
+    border: "1px solid #007BFF",
+    backgroundColor: "white",
+    borderRadius: "30px",
+    cursor: "pointer",
+    fontSize: "1.1rem",
+    fontWeight: "600",
+    color: "#007BFF",
+    transition: "all 0.3s ease",
+  },
+  activeFilter: {
+    backgroundColor: "#007BFF",
+    color: "white",
+    borderColor: "#007BFF",
+  },
+  certificationsList: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
+    gap: "30px",
+  },
+  certCard: {
+    backgroundColor: "white",
+    border: "1px solid #ddd",
+    borderRadius: "10px",
+    overflow: "hidden",
+    transition: "transform 0.3s ease, box-shadow 0.3s ease",
+    cursor: "pointer",
+    textAlign: "center",
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+    padding: "30px",
+    minHeight: "300px",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  certIcon: {
+    marginBottom: "20px",
+    color: "#333",
+  },
+  certInfo: {
+    padding: "10px",
+  },
+  certTitle: {
+    fontSize: "1.5rem",
+    fontWeight: "600",
+    marginBottom: "10px",
+    color: "#333",
+  },
+  certDetail: {
+    fontSize: "1rem",
+    color: "#555",
+    marginBottom: "5px",
+  },
+  viewDetailsBtn: {
+    marginTop: "20px",
+    padding: "12px 24px",
+    backgroundColor: "#007BFF",
+    color: "white",
+    borderRadius: "30px",
+    textDecoration: "none",
+    fontWeight: "600",
+    cursor: "pointer",
+    transition: "background-color 0.3s",
+  },
+  showAllBtnContainer: {
+    textAlign: "center",
+    marginTop: "30px",
+  },
+  showAllBtn: {
+    padding: "12px 24px",
+    backgroundColor: "#28a745",
+    color: "white",
+    borderRadius: "30px",
+    cursor: "pointer",
+    fontSize: "1.1rem",
+    fontWeight: "600",
+    transition: "background-color 0.3s",
+  },
 };
 
 export default CertifPage;

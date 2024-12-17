@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { MoonIcon, SunIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
+import { MoonIcon, SunIcon, ChevronDownIcon, ShoppingCartIcon } from "@heroicons/react/24/solid";
 import log from "../../../assets/img/log.svg";
 
 const Nav = () => {
   const [dark, setDark] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
   const navigate = useNavigate();
-
   const [userEmail, setUserEmail] = useState(localStorage.getItem("userEmail"));
   const userName = userEmail ? userEmail.split("@")[0] : "Utilisateur";
 
@@ -16,6 +16,10 @@ const Nav = () => {
     if (!userEmail) {
       navigate("/"); // Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
     }
+
+    // Charger le nombre d'articles dans le panier depuis le localStorage
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    setCartCount(cart.length);
   }, [userEmail, navigate]);
 
   const darkModeHandler = () => {
@@ -26,6 +30,11 @@ const Nav = () => {
   const handleLogout = () => {
     localStorage.removeItem("userEmail");
     navigate("/");
+  };
+
+  const handleCartClick = () => {
+    // Rediriger vers la page du panier
+    navigate('/user/Panier');
   };
 
   return (
@@ -44,45 +53,34 @@ const Nav = () => {
 
         {/* Navigation Links */}
         <div className="hidden md:flex gap-6">
-          <a
-            href="/Landing"
-            className="text-gray-800 dark:text-white hover:text-blue-500 dark:hover:text-blue-400 font-medium"
-          >
-            Accueil
-          </a>
-          <a
-            href="/Tests/Tests"
-            className="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium"
-          >
-           Tests
-          </a>
-          <a
-            href="/certif"
-            className="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium"
-          >
-            Certificats
-          </a>
-          <a
-            href="/profil"
-            className="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium"
-          >
-            Portfolio
-          </a>
+          <a href="/Landing" className="text-gray-800 dark:text-white hover:text-blue-500 dark:hover:text-blue-400 font-medium">Accueil</a>
+          <a href="/Tests/Tests" className="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium">Tests</a>
+          <a href="/certif" className="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium">Certificats</a>
+          <a href="/profil" className="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium">Portfolio</a>
         </div>
 
-        {/* Profile and Dark Mode Section */}
+        {/* Profile and Cart Section */}
         <div className="relative flex items-center gap-4">
           {/* Dark Mode Toggle */}
           <button onClick={darkModeHandler} className="text-gray-800 dark:text-gray-300 hover:text-blue-500">
             {dark ? <SunIcon className="h-6 w-6" /> : <MoonIcon className="h-6 w-6" />}
           </button>
 
+          {/* Cart */}
+          <div className="relative">
+            <button onClick={handleCartClick} className="focus:outline-none">
+              <ShoppingCartIcon className="h-6 w-6 text-gray-800 dark:text-gray-300 cursor-pointer" />
+            </button>
+            {cartCount > 0 && (
+              <span className="absolute top-0 right-0 text-xs text-white bg-red-500 rounded-full px-2">
+                {cartCount}
+              </span>
+            )}
+          </div>
+
           {/* User Dropdown */}
           <div className="relative">
-            <div
-              className="flex items-center gap-2 cursor-pointer"
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            >
+            <div className="flex items-center gap-2 cursor-pointer" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
               <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white flex items-center justify-center font-bold uppercase">
                 {userName.charAt(0)}
               </div>
@@ -93,24 +91,9 @@ const Nav = () => {
             {/* Dropdown Menu */}
             {isDropdownOpen && (
               <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg z-20">
-                <a
-                  href="/Score"
-                  className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-t-lg"
-                >
-                  Score
-                </a>
-                <a
-                  href="/Settings"
-                  className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                >
-                  Paramètres
-                </a>
-                <button
-                  onClick={handleLogout}
-                  className="w-full text-left px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-b-lg"
-                >
-                  Déconnexion
-                </button>
+                <a href="/Score" className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-t-lg">Score</a>
+                <a href="/Settings" className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">Paramètres</a>
+                <button onClick={handleLogout} className="w-full text-left px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-b-lg">Déconnexion</button>
               </div>
             )}
           </div>

@@ -34,12 +34,7 @@ const NavBar = () => {
           >
             Accueil
           </a>
-          <a
-            href="/QCM/QCM"
-            className="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium"
-          >
-           QCM
-          </a>
+    
           <a
             href="/Tests/Tests"
             className="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium"

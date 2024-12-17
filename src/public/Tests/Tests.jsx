@@ -2,19 +2,15 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Nav from "../../components/public/landing/nav";
 
-// Importation des images dynamiques
-import reactImage from "../../assets/img/React.jpg";
-import angularImage from "../../assets/img/Angular.png";
-import nodeImage from "../../assets/img/Python.png";
-import designImage from "../../assets/img/Angular.png";
-import defaultImage from "../../assets/img/Angular.png";
+// Importation des icônes dynamiques
+import { FaReact, FaAngular, FaCog, FaPaintBrush } from "react-icons/fa"; // FaCog pour Spring
 
 const TestsPage = () => {
   const [tests, setTests] = useState([
-    { id: 1, name: "React Basics", technology: "React", level: "Débutant", image: reactImage },
-    { id: 2, name: "Angular Directives", technology: "Angular", level: "Intermédiaire", image: angularImage },
-    { id: 3, name: "Node.js API", technology: "Node.js", level: "Avancé", image: nodeImage },
-    { id: 4, name: "UI Design Principles", technology: "Design", level: "Débutant", image: designImage },
+    { id: 1, name: "React Basics", technology: "React", level: "Débutant", icon: <FaReact size={60} color="#61dafb" /> },
+    { id: 2, name: "Angular Directives", technology: "Angular", level: "Intermédiaire", icon: <FaAngular size={60} color="#dd1b16" /> },
+    { id: 3, name: "Spring Framework", technology: "Spring", level: "Avancé", icon: <FaCog size={60} color="#6db33f" /> }, // FaCog pour Spring
+    { id: 4, name: "UI Design Principles", technology: "Design", level: "Débutant", icon: <FaPaintBrush size={60} color="#e4e4e4" /> },
   ]);
 
   const [filter, setFilter] = useState("Tous");
@@ -25,11 +21,10 @@ const TestsPage = () => {
   };
 
   const handleTestClick = (technology) => {
-    // Rediriger vers une page spécifique pour chaque technologie
     const routes = {
       React: "/Tests/TestReact",
       Angular: "/Tests/TestAngular",
-      spring: "/Tests/TestSpring",
+      Spring: "/Tests/TestSpring",  // Modification de la route pour Spring
       Design: "/Tests/TestDesign",
     };
     navigate(routes[technology] || "/Tests/TestDefault");
@@ -48,7 +43,7 @@ const TestsPage = () => {
 
         {/* Filtres */}
         <div style={styles.filters}>
-          {["Tous", "React", "Angular", "Node.js", "Design"].map((tech) => (
+          {["Tous", "React", "Angular", "Spring", "Design"].map((tech) => (
             <button
               key={tech}
               style={{
@@ -69,12 +64,11 @@ const TestsPage = () => {
               key={test.id}
               style={styles.testCard}
               onClick={() => handleTestClick(test.technology)}
+              className="test-card-hover"
             >
-              <img
-                src={test.image || defaultImage}
-                alt={test.technology}
-                style={styles.testImage}
-              />
+              <div style={styles.testIcon}>
+                {test.icon}
+              </div>
               <div style={styles.testInfo}>
                 <h3 style={styles.testTitle}>{test.name}</h3>
                 <p style={styles.testDetail}>
@@ -99,6 +93,7 @@ const styles = {
     margin: "0 auto",
     fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
     color: "#333",
+    backgroundColor: "#f7f8fa", // Couleur de fond douce
   },
   header: {
     display: "flex",
@@ -108,23 +103,28 @@ const styles = {
   },
   title: {
     fontSize: "2.5rem",
-    fontWeight: "600",
+    fontWeight: "700",
     color: "#007BFF",
+    textTransform: "uppercase", // Rendre le texte plus percutant
+    letterSpacing: "2px",
   },
   filters: {
     display: "flex",
-    gap: "10px",
+    gap: "12px",
     justifyContent: "center",
     marginBottom: "20px",
+    flexWrap: "wrap", // Permet aux filtres de s'ajuster à la taille de l'écran
   },
   filterBtn: {
-    padding: "8px 15px",
-    border: "1px solid #ccc",
+    padding: "12px 20px", // Augmenter la taille du bouton
+    border: "1px solid #007BFF",
     backgroundColor: "white",
     borderRadius: "30px",
     cursor: "pointer",
-    fontSize: "1rem",
-    transition: "all 0.3s",
+    fontSize: "1.1rem", // Légèrement plus grand
+    fontWeight: "600",
+    color: "#007BFF",
+    transition: "all 0.3s ease",
   },
   activeFilter: {
     backgroundColor: "#007BFF",
@@ -133,44 +133,46 @@ const styles = {
   },
   testsList: {
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))",
-    gap: "15px",
+    gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))", // Agrandir la taille des cartes
+    gap: "30px", // Plus d'espace entre les cartes
   },
   testCard: {
     backgroundColor: "white",
     border: "1px solid #ddd",
     borderRadius: "10px",
     overflow: "hidden",
-    transition: "transform 0.3s, box-shadow 0.3s",
+    transition: "transform 0.3s ease, box-shadow 0.3s ease",
     cursor: "pointer",
     textAlign: "center",
-    boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
-    padding: "20px", 
-    minHeight: "220px", 
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+    padding: "30px", // Augmenter le padding pour une carte plus grande
+    minHeight: "300px", // Augmenter la hauteur minimale de la carte
     display: "flex",
     flexDirection: "column",
-    justifyContent: "space-between", 
+    justifyContent: "space-between",
+    alignItems: "center",
   },
-  
-  testImage: {
-    width: "100%",
-    height: "80px",
-    objectFit: "contain", 
-    marginBottom: "10px", 
-},
-
+  testIcon: {
+    marginBottom: "20px", // Plus d'espace entre l'icône et le texte
+    color: "#333",
+  },
   testInfo: {
     padding: "10px",
   },
   testTitle: {
-    fontSize: "1.2rem", 
+    fontSize: "1.5rem", // Augmenter la taille du titre
     fontWeight: "600",
     marginBottom: "10px",
+    color: "#333",
   },
-  
   testDetail: {
-    fontSize: "0.9rem",
+    fontSize: "1rem", // Agrandir légèrement le texte des détails
     color: "#555",
+    marginBottom: "5px",
+  },
+  testCardHover: {
+    transform: "translateY(-5px)",
+    boxShadow: "0 15px 30px rgba(0, 0, 0, 0.1)", // Ombre plus forte au survol
   },
 };
 

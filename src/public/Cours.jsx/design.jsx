@@ -12,7 +12,7 @@ const Design = () => {
             Design Academy
           </a>
           <div className="space-x-6">
-            <a href="/" className="text-white">Accueil</a>
+            <a href="/Landing" className="text-white">Accueil</a>
             <a href="#design-basics" className="text-white">Bases du Design</a>
             <a href="#advanced-concepts" className="text-white">Concepts Avancés</a>
             <a href="#resources" className="text-white">Ressources</a>
